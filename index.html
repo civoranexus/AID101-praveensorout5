@@ -1,11 +1,112 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document of Agri Assist Project</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agri Assist</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f9f4;
+      color: #333;
+    }
+    header {
+      background: #2e7d32;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .hero {
+      background: #81c784;
+      color: #fff;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    .container {
+      padding: 2rem;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .feature {
+      flex: 1 1 250px;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: #2e7d32;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+  </style>
 </head>
 <body>
-    
+  <header>
+    <h1>Agri Assist</h1>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <h1>Your Smart Agriculture Companion</h1>
+    <p>Helping farmers with insights, weather, and market trends.</p>
+  </section>
+
+  <main class="container">
+    <section id="features">
+      <h2>Features</h2>
+      <div class="features">
+        <div class="feature">
+          <h3>🌱 Crop Advisory</h3>
+          <p>Get personalized recommendations for crop selection, irrigation, and fertilization.</p>
+        </div>
+        <div class="feature">
+          <h3>☀️ Weather Updates</h3>
+          <p>Stay informed with real-time weather forecasts tailored to your region.</p>
+        </div>
+        <div class="feature">
+          <h3>📈 Market Insights</h3>
+          <p>Track commodity prices and market trends to maximize your profits.</p>
+        </div>
+        <div class="feature">
+          <h3>🤝 Community Support</h3>
+          <p>Connect with other farmers and share best practices for sustainable farming.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>Email: support@agriassist.com</p>
+      <p>Phone: +91-9876543210</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Agri Assist. All rights reserved.</p>
+  </footer>
 </body>
 </html>
