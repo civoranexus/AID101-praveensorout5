@@ -1,97 +1,58 @@
-// script.js
-
-// -----------------------------
 // Smooth scroll for navigation
-// -----------------------------
-document.querySelectorAll("nav a").forEach(link => {
-  link.addEventListener("click", function(e) {
+document.querySelector("nav").addEventListener("click", e => {
+  if (e.target.tagName === "A") {
     e.preventDefault();
-    const targetId = this.getAttribute("href").substring(1);
-    const targetSection = document.getElementById(targetId);
-    if (targetSection) {
-      targetSection.scrollIntoView({ behavior: "smooth" });
-    }
-  });
+    const targetId = e.target.getAttribute("href").slice(1);
+    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+  }
 });
 
-// Highlight feature on click.
-document.querySelectorAll(".feature").forEach(feature => {
-  feature.addEventListener("click", () => {
+// Feature click alert
+document.addEventListener("click", e => {
+  const feature = e.target.closest(".feature");
+  if (feature) {
     alert(`You clicked on: ${feature.querySelector("h3").innerText}`);
-  });
+  }
 });
 
-// -----------------------------
 // Dynamic footer year
-// -----------------------------
-const footer = document.querySelector("footer p");
-const currentYear = new Date().getFullYear();
-footer.innerHTML = `&copy; ${currentYear} Agri Assist. All rights reserved.`;
+const footerText = document.querySelector("footer p");
+if (footerText) {
+  footerText.textContent = `© ${new Date().getFullYear()} Agri Assist. All rights reserved.`;
+}
 
-// -----------------------------
 // Toggle contact info
-// -----------------------------
 const contactSection = document.getElementById("contact");
-const toggleBtn = document.createElement("button");
-toggleBtn.textContent = "Toggle Contact Info";
-toggleBtn.style.marginTop = "1rem";
-toggleBtn.style.padding = "0.5rem 1rem";
-toggleBtn.style.backgroundColor = "#2e7d32";
-toggleBtn.style.color = "#fff";
-toggleBtn.style.border = "none";
-toggleBtn.style.borderRadius = "5px";
-toggleBtn.style.cursor = "pointer";
-contactSection.appendChild(toggleBtn);
-
-toggleBtn.addEventListener("click", () => {
-  contactSection.querySelectorAll("p").forEach(p => {
-    p.style.display = (p.style.display === "none") ? "block" : "none";
+if (contactSection) {
+  const toggleBtn = Object.assign(document.createElement("button"), {
+    textContent: "Toggle Contact Info",
+    className: "toggle-btn"
   });
-});
+  contactSection.appendChild(toggleBtn);
 
-// -----------------------------
-// Crop Advisory Demo Form Logic
-// -----------------------------
-// (Optional: Add this form in your HTML inside #features or a new section)
-//
-// <section id="advisory">
-//   <h2>Crop Advisory</h2>
-//   <form id="advisoryForm">
-//     <label for="crop">Enter Crop Name:</label>
-//     <input type="text" id="crop" name="crop" required>
-//     <button type="submit">Get Advice</button>
-//   </form>
-//   <div id="adviceOutput"></div>
-// </section>
+  toggleBtn.addEventListener("click", () => {
+    contactSection.querySelectorAll("p").forEach(p => {
+      p.hidden = !p.hidden;
+    });
+  });
+}
 
+// Crop Advisory Form Logic
 const advisoryForm = document.getElementById("advisoryForm");
 if (advisoryForm) {
-  advisoryForm.addEventListener("submit", function(e) {
+  advisoryForm.addEventListener("submit", e => {
     e.preventDefault();
-    const crop = document.getElementById("crop").value.trim().toLowerCase();
+    const crop = advisoryForm.crop.value.trim().toLowerCase();
     const output = document.getElementById("adviceOutput");
 
-    let advice = "";
-    switch (crop) {
-      case "wheat":
-        advice = "🌾 Wheat grows best in cool climates. Ensure timely irrigation during critical growth stages.";
-        break;
-      case "rice":
-        advice = "🍚 Rice requires standing water. Monitor rainfall and consider alternate wetting and drying for sustainability.";
-        break;
-      case "maize":
-        advice = "🌽 Maize needs well-drained soil. Apply nitrogen fertilizer in split doses for better yield.";
-        break;
-      case "cotton":
-        advice = "🧵 Cotton thrives in warm climates. Watch for pests like bollworms and use integrated pest management.";
-        break;
-      default:
-        advice = "❓ No specific advice found. Please consult local experts or extension services.";
-    }
+    const adviceMap = {
+      wheat: "🌾 Wheat grows best in cool climates. Ensure timely irrigation during critical growth stages.",
+      rice: "🍚 Rice requires standing water. Monitor rainfall and consider alternate wetting and drying for sustainability.",
+      maize: "🌽 Maize needs well-drained soil. Apply nitrogen fertilizer in split doses for better yield.",
+      cotton: "🧵 Cotton thrives in warm climates. Watch for pests like bollworms and use integrated pest management."
+    };
 
-    output.textContent = advice;
-    output.style.marginTop = "1rem";
-    output.style.fontWeight = "500";
-    output.style.color = "#2e7d32";
+    output.textContent = adviceMap[crop] || "❓ No specific advice found. Please consult local experts or extension services.";
+    Object.assign(output.style, { marginTop: "1rem", fontWeight: "500", color: "#2e7d32" });
   });
 }
