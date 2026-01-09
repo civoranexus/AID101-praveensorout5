@@ -1,6 +1,4 @@
 // script.js
-
-// -----------------------------
 // Smooth scroll for navigation
 // -----------------------------
 document.querySelectorAll("nav a").forEach(link => {
