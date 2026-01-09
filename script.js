@@ -14,9 +14,7 @@ document.querySelectorAll("nav a").forEach(link => {
   });
 });
 
-// -----------------------------
-// Highlight feature on click
-// -----------------------------
+// Highlight feature on click.
 document.querySelectorAll(".feature").forEach(feature => {
   feature.addEventListener("click", () => {
     alert(`You clicked on: ${feature.querySelector("h3").innerText}`);
