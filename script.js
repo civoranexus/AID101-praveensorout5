@@ -1,8 +1,3 @@
-// script.js
-
-// -----------------------------
-// Smooth scroll for navigation
-// -----------------------------
 document.querySelectorAll("nav a").forEach(link => {
   link.addEventListener("click", function(e) {
     e.preventDefault();
@@ -14,23 +9,16 @@ document.querySelectorAll("nav a").forEach(link => {
   });
 });
 
-// Highlight feature on click.
 document.querySelectorAll(".feature").forEach(feature => {
   feature.addEventListener("click", () => {
     alert(`You clicked on: ${feature.querySelector("h3").innerText}`);
   });
 });
 
-// -----------------------------
-// Dynamic footer year
-// -----------------------------
 const footer = document.querySelector("footer p");
 const currentYear = new Date().getFullYear();
 footer.innerHTML = `&copy; ${currentYear} Agri Assist. All rights reserved.`;
 
-// -----------------------------
-// Toggle contact info
-// -----------------------------
 const contactSection = document.getElementById("contact");
 const toggleBtn = document.createElement("button");
 toggleBtn.textContent = "Toggle Contact Info";
@@ -48,21 +36,6 @@ toggleBtn.addEventListener("click", () => {
     p.style.display = (p.style.display === "none") ? "block" : "none";
   });
 });
-
-// -----------------------------
-// Crop Advisory Demo Form Logic
-// -----------------------------
-// (Optional: Add this form in your HTML inside #features or a new section)
-//
-// <section id="advisory">
-//   <h2>Crop Advisory</h2>
-//   <form id="advisoryForm">
-//     <label for="crop">Enter Crop Name:</label>
-//     <input type="text" id="crop" name="crop" required>
-//     <button type="submit">Get Advice</button>
-//   </form>
-//   <div id="adviceOutput"></div>
-// </section>
 
 const advisoryForm = document.getElementById("advisoryForm");
 if (advisoryForm) {
