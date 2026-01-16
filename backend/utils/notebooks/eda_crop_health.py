@@ -1,95 +1,87 @@
 """
 AgriAssist AI - Phase 1
-Exploratory Data Analysis (EDA) - Crop Health Dataset
-This script inspects crop disease image dataset using pandas and visualization libraries.
+Exploratory Data Analysis (EDA) - Crop Health Dataset (Large ~50k rows)
+This script inspects crop disease dataset using pandas for efficiency.
 """
 
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from PIL import Image
-import numpy as np
 
 # ---------- LOAD DATA ----------
-DATA_PATH = os.path.join(os.path.dirname(__file__), "../datasets/crop_images")
+DATA_PATH = os.path.join(os.path.dirname(__file__), "../datasets/crop_health.csv")
 
-# Assume dataset folder structure: crop_images/<class_name>/<image_files>
-classes = []
-counts = []
+# Expect columns: image_id, file_path, class, width, height, (optional: avg_intensity)
+df = pd.read_csv(DATA_PATH)
 
-for class_name in os.listdir(DATA_PATH):
-    class_dir = os.path.join(DATA_PATH, class_name)
-    if os.path.isdir(class_dir):
-        img_files = [f for f in os.listdir(class_dir) if f.lower().endswith((".jpg",".png",".jpeg"))]
-        classes.append(class_name)
-        counts.append(len(img_files))
+# ---------- BASIC INFO ----------
+print("Dataset Shape:", df.shape)
+print("\nColumns:", df.columns.tolist())
+print("\nFirst 5 rows:\n", df.head())
 
-# Create DataFrame for summary
-df = pd.DataFrame({"class": classes, "image_count": counts})
-print("Crop Health Dataset Summary:\n", df)
+# ---------- CLEANING ----------
+# Drop duplicates and missing values
+df = df.dropna().drop_duplicates()
+
+# ---------- SUMMARY STATISTICS ----------
+print("\nSummary Statistics:\n", df.describe(include="all"))
 
 # ---------- VISUALIZATIONS ----------
 
-# Class distribution bar chart
-plt.figure(figsize=(10,6))
-sns.barplot(x="class", y="image_count", data=df, palette="Set2")
-plt.title("Distribution of Crop Health Classes")
-plt.xlabel("Class")
-plt.ylabel("Number of Images")
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.savefig("eda_crop_health_class_distribution.png")
-plt.close()
+# Class distribution
+if "class" in df.columns:
+    plt.figure(figsize=(12,6))
+    sns.countplot(x="class", data=df, order=df["class"].value_counts().index, palette="Set2")
+    plt.title("Distribution of Crop Health Classes")
+    plt.xlabel("Class")
+    plt.ylabel("Number of Images")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig("eda_crop_health_class_distribution.png")
+    plt.close()
 
-# Inspect sample image sizes
-sample_sizes = []
-for class_name in classes:
-    class_dir = os.path.join(DATA_PATH, class_name)
-    img_files = [f for f in os.listdir(class_dir) if f.lower().endswith((".jpg",".png",".jpeg"))]
-    if img_files:
-        img_path = os.path.join(class_dir, img_files[0])
-        with Image.open(img_path) as img:
-            sample_sizes.append(img.size)
+# Image width and height distributions (sampled for efficiency)
+if set(["width","height"]).issubset(df.columns):
+    sample_df = df.sample(n=min(10000, len(df)), random_state=42)  # sample 10k rows for plotting
+    plt.figure(figsize=(8,5))
+    sns.histplot(sample_df["width"], bins=30, color="blue", kde=True)
+    plt.title("Distribution of Image Widths (sampled)")
+    plt.xlabel("Width (pixels)")
+    plt.ylabel("Frequency")
+    plt.tight_layout()
+    plt.savefig("eda_crop_health_widths.png")
+    plt.close()
 
-sizes_df = pd.DataFrame(sample_sizes, columns=["width","height"])
-print("\nSample image sizes:\n", sizes_df.describe())
+    plt.figure(figsize=(8,5))
+    sns.histplot(sample_df["height"], bins=30, color="green", kde=True)
+    plt.title("Distribution of Image Heights (sampled)")
+    plt.xlabel("Height (pixels)")
+    plt.ylabel("Frequency")
+    plt.tight_layout()
+    plt.savefig("eda_crop_health_heights.png")
+    plt.close()
 
-# Histogram of image widths and heights
-plt.figure(figsize=(8,5))
-sns.histplot(sizes_df["width"], bins=20, color="blue", kde=True)
-plt.title("Distribution of Image Widths")
-plt.xlabel("Width (pixels)")
-plt.ylabel("Frequency")
-plt.tight_layout()
-plt.savefig("eda_crop_health_widths.png")
-plt.close()
+# Average intensity distribution (if available)
+if "avg_intensity" in df.columns:
+    plt.figure(figsize=(8,5))
+    sns.histplot(df["avg_intensity"].sample(n=min(10000, len(df)), random_state=42), bins=50, color="purple")
+    plt.title("Pixel Intensity Distribution (sampled)")
+    plt.xlabel("Intensity (0-255)")
+    plt.ylabel("Frequency")
+    plt.tight_layout()
+    plt.savefig("eda_crop_health_intensity.png")
+    plt.close()
 
-plt.figure(figsize=(8,5))
-sns.histplot(sizes_df["height"], bins=20, color="green", kde=True)
-plt.title("Distribution of Image Heights")
-plt.xlabel("Height (pixels)")
-plt.ylabel("Frequency")
-plt.tight_layout()
-plt.savefig("eda_crop_health_heights.png")
-plt.close()
-
-# ---------- PIXEL INTENSITY CHECK ----------
-# Inspect one sample image pixel intensity distribution
-if classes:
-    sample_class = classes[0]
-    sample_dir = os.path.join(DATA_PATH, sample_class)
-    sample_img = [f for f in os.listdir(sample_dir) if f.lower().endswith((".jpg",".png",".jpeg"))][0]
-    sample_path = os.path.join(sample_dir, sample_img)
-    with Image.open(sample_path).convert("L") as img_gray:
-        arr = np.array(img_gray).flatten()
-        plt.figure(figsize=(8,5))
-        sns.histplot(arr, bins=50, color="purple")
-        plt.title(f"Pixel Intensity Distribution ({sample_class} sample)")
-        plt.xlabel("Pixel Intensity (0-255)")
-        plt.ylabel("Frequency")
-        plt.tight_layout()
-        plt.savefig("eda_crop_health_pixel_intensity.png")
-        plt.close()
+# Correlation heatmap (numeric features only)
+num_cols = df.select_dtypes(include=["float64","int64"]).columns
+if len(num_cols) > 1:
+    corr_sample = df[num_cols].sample(n=min(10000, len(df)), random_state=42)
+    plt.figure(figsize=(8,6))
+    sns.heatmap(corr_sample.corr(), annot=True, cmap="coolwarm")
+    plt.title("Correlation Between Crop Health Variables (sampled)")
+    plt.tight_layout()
+    plt.savefig("eda_crop_health_correlation.png")
+    plt.close()
 
 print("EDA complete. Crop health plots saved as PNG files in current directory.")
