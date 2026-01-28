@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AgriAssist AI - Farmer Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Civora Nexus theme styling -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>🌱 AgriAssist AI</h1>
+        <p>Your AI-powered agricultural advisor</p>
+    </header>
+
+    <main class="container">
+        <!-- Registration/Login Section -->
+        <section class="auth-section">
+            <h2>Farmer Login / Registration</h2>
+            <form id="authForm">
+                <label for="farmerName">Farmer Name:</label>
+                <input type="text" id="farmerName" name="farmerName" required>
+
+                <label for="cropType">Crop Type:</label>
+                <input type="text" id="cropType" name="cropType" required>
+
+                <label for="acreage">Acreage (hectares):</label>
+                <input type="number" id="acreage" name="acreage" step="0.1" required>
+
+                <label for="plantingDate">Planting Date:</label>
+                <input type="date" id="plantingDate" name="plantingDate" required>
+
+                <label for="soilType">Soil Type:</label>
+                <input type="text" id="soilType" name="soilType">
+
+                <label for="region">Region:</label>
+                <input type="text" id="region" name="region">
+
+                <button type="submit">Register / Login</button>
+            </form>
+        </section>
+
+        <!-- Advisory Alerts Preview -->
+        <section class="advisory-preview">
+            <h2>Latest Advisory Alerts</h2>
+            <div id="advisoryContainer">
+                <p>No advisories yet. Register to see personalized recommendations.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy
