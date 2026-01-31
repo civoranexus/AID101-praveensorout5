@@ -1,0 +1,31 @@
+"""
+AgriAssist AI - Irrigation Model Training
+Phase 2: Advisory Engine + Dashboard Integration
+
+This script trains a simple irrigation scheduling model and saves it as a .pkl file.
+"""
+
+import pickle
+from sklearn.tree import DecisionTreeClassifier
+import numpy as np
+
+# Example training data (rainfall, temperature, humidity → irrigation_needed)
+X = np.array([
+    [5, 36, 60],   # low rainfall, high temp, medium humidity
+    [20, 28, 70],  # good rainfall, moderate temp, high humidity
+    [8, 40, 50],   # low rainfall, very high temp, medium humidity
+])
+y = np.array([1, 0, 1])  # 1 = irrigation needed, 0 = not needed
+
+# Train model
+model = DecisionTreeClassifier()
+model.fit(X, y)
+
+# Save model to pickle file
+with open("backend/models_store/irrigation_model.pkl", "wb") as f:
+    pickle.dump(model, f)
+
+print("Irrigation model saved to models_store/irrigation_model.pkl")
+with open("backend/models_store/irrigation_model.pkl", "rb") as f:
+    irrigation_model = pickle.load(f)
+prediction = irrigation_model.predict([[rainfall, temperature, humidity]])
