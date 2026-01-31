@@ -1,0 +1,23 @@
+import pickle
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# Example training data: [acreage, rainfall, nitrogen] → yield
+X = np.array([
+    [10, 200, 30],
+    [15, 150, 25],
+    [8, 180, 28],
+])
+y = np.array([25, 30, 18])  # yields in quintals
+
+model = LinearRegression()
+model.fit(X, y)
+
+# Save model
+with open("backend/models_store/yield_model.pkl", "wb") as f:
+    pickle.dump(model, f)
+
+print("Yield model saved to models_store/yield_model.pkl")
+with open("backend/models_store/yield_model.pkl", "rb") as f:
+    yield_model = pickle.load(f)
+prediction = yield_model.predict([[acreage, rainfall, nitrogen]])
